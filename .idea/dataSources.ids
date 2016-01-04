@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - @localhost" uuid="4e10b282-417e-4ead-b9d2-ddf39cd7b730">
+    <database-info product="MySQL" version="5.6.26" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper"/>
+    <schema name="" catalog="test"/>
+    <table name="shop" schema="" catalog="test" type="TABLE">
+      <column name="article" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" def="MDAwMA=="/>
+      <column name="dealer" sqlType="CHAR" precision="20" scale="0" nullable="false" jdbcType="1" def="Jyc="/>
+      <column name="price" sqlType="DOUBLE" precision="16" scale="2" nullable="false" jdbcType="8" def="MC4wMA=="/>
+      <primary-key name="PRIMARY" columns="article,dealer"/>
+    </table>
+  </data-source>
+</component>
