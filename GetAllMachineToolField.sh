@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 awk '{
 		if($0 ~ "机床=机床名称") {
 			m = split($0, a, ",")
