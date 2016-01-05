@@ -12,7 +12,7 @@ awk '{
 	};
 	END {
 		for(i in machine) print i;
-	}' /Users/kosei/Desktop/车削铣削.txt
+	}' ./车削铣削.txt
 
 #之所以写两遍而没用循环是因为可以减少在变量命名上的纠结
 
@@ -28,4 +28,4 @@ awk '{
 	};
 	END {
 		for(i in machine) print i;
-	}' /Users/kosei/Desktop/车削铣削.txt
+	}' ./车削铣削.txt
