@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 awk '{
     if($0 ~ "加工对象="){
         split($0, a, ",")
