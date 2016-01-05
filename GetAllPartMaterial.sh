@@ -10,4 +10,4 @@ awk '{
     } else;
 }; END {
     for(i in c) print i;
-}' /Users/kosei/Desktop/车削铣削.txt
+}' ./车削铣削.txt
