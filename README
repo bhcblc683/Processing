@@ -159,4 +159,4 @@
 * **processing_stainless_steel**布尔值，表示刀具能否加工**不锈钢**材料。
 * **processing_gray_cast_iron**布尔值，表示刀具能否加工**灰铸铁**材料。
 * **processing_alloy_steel**布尔值，表示刀具能否加工**合金钢**材料。
-* **processing_function_id**外键，来自**processing_function.processing_function**用于与拥有的加工功能对应。
+* **processing_function_id**外键，来自**processing_function.processing_function**用于与拥有的加工功能相对应。
