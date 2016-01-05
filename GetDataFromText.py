@@ -4,9 +4,9 @@ from os import linesep
 from types import DictType
 # TODO: 重要事情说三遍
 
-# TODO: 数据录入格式：实例名称（例如：加工功能）＝字段1，（逗号为中文）字段2，......( 如字段中有多项用‘、’（中文顿号分隔）), 同一加工资源与其它的之间以一个或者多个空格分隔
-# TODO: 数据录入格式：实例名称（例如：加工功能）＝字段1，（逗号为中文）字段2，......( 如字段中有多项用‘、’（中文顿号分隔）), 同一加工资源与其它的之间以一个或者多个空格分隔
-# TODO: 数据录入格式：实例名称（例如：加工功能）＝字段1，（逗号为中文）字段2，......( 如字段中有多项用‘、’（中文顿号分隔）), 同一加工资源与其它的之间以一个或者多个空格分隔
+# TODO: 数据录入格式：实例名称（例如：加工功能）＝字段1,（逗号为英文）字段2,......( 如字段中有多项用‘、’（中文顿号分隔）),同一加工资源与其它的之间以一个或者多个空行分隔
+# TODO: 数据录入格式：实例名称（例如：加工功能）＝字段1,（逗号为英文）字段2,......( 如字段中有多项用‘、’（中文顿号分隔）),同一加工资源与其它的之间以一个或者多个空行分隔
+# TODO: 数据录入格式：实例名称（例如：加工功能）＝字段1,（逗号为英文）字段2,......( 如字段中有多项用‘、’（中文顿号分隔）),同一加工资源与其它的之间以一个或者多个空行分隔
 
 
 data_file_path = '/Users/kosei/Desktop/车削铣削.txt'
@@ -176,6 +176,37 @@ class GetDataFromTxt(object):
         return self._data_dict
 
 
+processing_function_insert_sql_template = """INSERT INTO processing_function.processing_function SET
+processing_function_name="%s",
+processing_function_description="%s",
+processing_precision_finishing="%d",
+processing_precision_semi="%d",
+processing_precision_rough="%d";
+"""
+
+
+class SqlGenerator(object):
+    def __init__(self, _data_dict):
+        self._data_dict = _data_dict
+        self._processing_function_insert_sql_template = """INSERT INTO processing_function.processing_function SET
+processing_function_name="%s",
+processing_function_description="%s",
+processing_precision_finishing=%d,
+processing_precision_semi=%d,
+processing_precision_rough=%d;
+"""
+
+    def generate_processing_function_insert_sql(self):
+        # TODO: 函数与成员之间耦合度有点高，继承重写去
+        for processing_function in self._data_dict['加工功能'].values():
+            precision = processing_function['加工精度']
+            print self._processing_function_insert_sql_template % (
+                            processing_function['功能名称'], processing_function['功能描述'],
+                            int(precision.find("精加工") >= 0), int(precision.find("半精加工") >= 0),
+                            int(precision.find("粗加工") >= 0)
+            )
+
+
 if __name__ == '__main__':
     # cl = GetDataFromCoupleTxtLine('机床=机床名称,机床编号,加工范围,加工精度,表面粗糙度,主轴转速范围,主电机功率',
     #                               '机床=普通车床,CH6132,320×750,圆度0.01圆柱度0.03/300平面度0.02/300,Ra1.6,35-1800r/min,4kw')
@@ -183,4 +214,9 @@ if __name__ == '__main__':
     # sl = GetDataFromSingleTxtLine('加工功能=铣较大平面,粗加工、半精加工、精加工,略')
     # print_em_dict(cl.get_data())
     g = GetDataFromTxt()
-    print_em_dict(g.get_data())
+    data_dict = g.get_data()
+    print '*' * 20
+    print_em_dict(data_dict)
+    print '*' * 20
+    s = SqlGenerator(data_dict)
+    s.generate_processing_function_insert_sql()
