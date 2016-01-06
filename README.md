@@ -39,21 +39,28 @@
 ### processing_function.processing_function表
 
 #### 建表语句
+
             CREATE TABLE processing_function (
-                                                `processing_function_name` VARCHAR(100) CHARSET utf8,
-                                                `processing_function_description` VARCHAR(100) CHARSET utf8,
-                                                `processing_precision_finishing` BOOL DEFAULT 0,
-                                                `processing_precision_semi` BOOL DEFAULT 0,
-                                                `processing_precision_rough` BOOL DEFAULT 0,
-                                                `processing_function_id` INT AUTO_INCREMENT,
-                                                 PRIMARY KEY (`processing_function_id`)
-                                            );
+                                               `processing_function_name` VARCHAR(100) CHARSET utf8,
+                                               `processing_function_description` VARCHAR(100) CHARSET utf8,
+                                               `processing_precision_finishing` BOOL DEFAULT 0,
+                                               `processing_precision_semi` BOOL DEFAULT 0,
+                                               `processing_precision_rough` BOOL DEFAULT 0,
+                                               `processing_function_id` INT AUTO_INCREMENT,
+                                               PRIMARY KEY (`processing_function_id`),
+                                               UNIQUE KEY (`processing_function_name`, `processing_precision_finishing`, `processing_precision_semi`, `processing_precision_rough`)
+                                             );
+
 
 #### 字段说明
 
 表中每一行都代表一个加工功能实例，用一个布尔值来表示该加工能是否具有相应的加工精度。
 
-* **processing_function_id**自增主键，对应唯一一个加工功能。
+
+为了避免数据重复，将**processing_function_name**，**processing_precision_finishing**，**processing_precision_semi**，
+**processing_precision_rough**联合起来作为唯一键，来唯一描述一个加工功能（重复的视为相同加工功能）。
+
+* **processing_function_id**自增主键，唯一对应一个加工功能。
 * **processing_function_name**表示加工功能名称。
 * **processing_function_description**表示加工功能的表述。
 * **processing_precision_finishing**布尔值，表示该加工能否进行精加工。
@@ -74,6 +81,7 @@
                                         `processing_range` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
                                         `main_electric_machinery_power` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
                                         `processing_precision` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
+                                        `processing_function_id` INT,
                                          FOREIGN KEY (`processing_function_id`) REFERENCES processing_function.processing_function (`processing_function_id`),
                                          PRIMARY KEY (`machine_tool_serial_number`)
                                       );
@@ -112,7 +120,7 @@
                                       `screw_type` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
                                       `blade_shape` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
                                       `blade_sum` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
-                                      `cutting_edage_length` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
+                                      `cutting_edge_length` VARCHAR(100) CHARSET utf8 DEFAULT NULL,
                                        # detail on processing ability
                                       `processing_heat_resisting_alloy` BOOL DEFAULT 0,
                                       `processing_cast_iron` BOOL DEFAULT 0,
