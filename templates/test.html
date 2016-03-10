@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div>
+        <form action="query" method="post">
+            {% csrf_token %}
+            <select name="cutterSelection">
+                {% for e_c_n in cutter_names %}
+                    <option>{{ e_c_n }}</option>
+                {% endfor %}
+                {% if cutterSelection %}
+                    <option selected=1>{{ cutterSelection }}</option>
+                {% endif %}
+            </select>
+            <input type="submit" value="查询" name="selected"/>
+        </form>
+    </div>
+{% if cutterSelection %}
+    <p>{{ cutterSelection }}</p>
+    <ul>
+    {% for e_f, e_v in res %}
+        <li><strong>{{ e_f }}: {{ e_v }}</strong></li>
+    {% endfor %}
+    </ul>
+{% else %}
+{% endif %}
+
+{% comment %}
+    <table frame='above' border="10">
+        <tr>
+            {% for e_f in fields %}
+                <th>{{ e_f }}</th>
+            {% endfor %}
+        </tr>
+        {% for e_r in lines %}
+            <tr>
+            {% for e_v in e_r %}
+                <td>{{ e_v }}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endcomment %}
+</body>
+</html>

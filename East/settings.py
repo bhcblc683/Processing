@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-q8=i8li$7#4w4cg(pfqi#s^a1f#!&pegx*v%+w0*pd40z)tim'
+SECRET_KEY = '-q8=i8li$7#4w4cg(pfqi#login^a1f#!&pegx*v%+w0*pd40z)tim'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'login',
+    'resource_query'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,7 +70,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'GMT'
 
 USE_I18N = True
 
@@ -76,10 +78,23 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEFAULT_CHARSET = 'utf-8'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
+# https://docs.djangoproject.com/en/1.7/howto/login-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/East/'
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+STATICFILES_DIRS = []
+
+TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),
+                 os.path.join(BASE_DIR, 'login/templates'),   # path to login templates
+                 )
+
+# my settings
+PAGE_AFTER_LOGIN = 'test.html'

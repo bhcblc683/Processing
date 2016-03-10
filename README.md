@@ -186,22 +186,22 @@ CREATE DATABASE human_resource;
 
 不久的将来会将预定时间单独建表。
 
-* **cutter_name**表示刀具名称，与**cutter_model**一起构成主键。
-* **cutter_model**表示刀具型号，与**cutter_name**一起构成主键。
-* **cutter_length**表示刀具长度。
-* **cutter_blade_diameter**表示刃径。
-* **cutter_diameter**表示刀具直径。
-* **cutter_tip_diameter**表示刀尖圆弧半径。
-* **enter_angle**表示主偏角。
-* **blade_width**表示刃宽。
-* **screw_pitch**表示螺距。
-* **hilt_length**表示刀柄长度。
-* **cutter_material**表示刀具材料。
-* **max_groove_depth**表示最大切槽深度。
-* **screw_type**表示螺纹种类。
-* **blade_shape**表示刀片形状。
-* **blade_sum**表示刃数。
-* **cutting_edge_length**表示切削刃长度。
+* **cutter_name**表示**刀具名称**，与**cutter_model**一起构成主键。
+* **cutter_model**表示**刀具型号**，与**cutter_name**一起构成主键。
+* **cutter_length**表示**刀具长度**。
+* **cutter_blade_diameter**表示**刃径**。
+* **cutter_diameter**表示**刀具直径**。
+* **cutter_tip_diameter**表示**刀尖圆弧半径**。
+* **enter_angle**表示**主偏角**。
+* **blade_width**表示**刃宽**。
+* **screw_pitch**表示**螺距**。
+* **hilt_length**表示**刀柄长度**。
+* **cutter_material**表示**刀具材料**。
+* **max_groove_depth**表示**最大切槽深度**。
+* **screw_type**表示**螺纹种类**。
+* **blade_shape**表示**刀片形状**。
+* **blade_sum**表示**刃数**。
+* **cutting_edge_length**表示**切削刃长度**。
 * **processing_heat_resisting_alloy**布尔值，表示刀具能否加工**耐热合金**材料。
 * **processing_cast_iron**布尔值，表示刀具能否加工**铸铁**材料。
 * **processing_titanium_alloy**布尔值，表示刀具能否加工**钛合金**材料。
