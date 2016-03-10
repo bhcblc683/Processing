@@ -10,11 +10,8 @@
             {% csrf_token %}
             <select name="cutterSelection">
                 {% for e_c_n in cutter_names %}
-                    <option>{{ e_c_n }}</option>
+                    <option id="{{ e_c_n }}">{{ e_c_n }}</option>
                 {% endfor %}
-                {% if cutterSelection %}
-                    <option selected=1>{{ cutterSelection }}</option>
-                {% endif %}
             </select>
             <input type="submit" value="查询" name="selected"/>
         </form>
@@ -46,4 +43,10 @@
     </table>
 {% endcomment %}
 </body>
+<script>
+    var selectedOption = document.getElementById("{{ cutterSelection }}")
+    if (selectedOption != null) {
+        selectedOption.setAttribute('selected', '1')
+    }
+</script>
 </html>
