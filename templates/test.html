@@ -8,6 +8,24 @@
     <div>
         <form action="query" method="post">
             {% csrf_token %}
+            <table>
+                {% for  e_c_p, e_c_p_v in cutter_param_value.items %}
+                    <tr class="cutter">
+                        <td class="cutterParamTd">
+                            <strong>{{ e_c_p }}: </strong><input type="search" class="cutterParam" />
+                        </td>
+                        <td class="cutterParamValueTd" hidden>
+                            <table border=10 frame="box">
+                                {% for e_v in e_c_p_v %}
+                                    <tr class="cutterParamValue">
+                                        <td>{{ e_v }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
             <select name="cutterSelection">
                 {% for e_c_n in cutter_names %}
                     <option id="{{ e_c_n }}">{{ e_c_n }}</option>
@@ -16,6 +34,7 @@
             <input type="submit" value="查询" name="selected"/>
         </form>
     </div>
+    {% comment %}
 {% if cutterSelection %}
     <p>{{ cutterSelection }}</p>
     <ul>
@@ -25,7 +44,7 @@
     </ul>
 {% else %}
 {% endif %}
-
+{% endcomment %}
 {% comment %}
     <table frame='above' border="10">
         <tr>
@@ -44,9 +63,49 @@
 {% endcomment %}
 </body>
 <script>
-    var selectedOption = document.getElementById("{{ cutterSelection }}")
+    var selectedOption = document.getElementById("{{ cutterSelection }}");
     if (selectedOption != null) {
-        selectedOption.setAttribute('selected', '1')
+        selectedOption.setAttribute('selected', '1');
+    }
+    function showOrHide(e) {
+        var target = e.target;
+        var p = target.parentNode.parentNode;
+        if (p.hasChildNodes()) {
+            var children = p.childNodes;
+            if (children.length > 0) {
+                for (var i = 0; i < children.length; ++i) {
+                    if (children[i].className == 'cutterParamValueTd') {
+                        switch (e.type) {
+                            case 'focus':
+                                children[i].removeAttribute('hidden');
+                                break;
+                            case 'blur':
+                                children[i].setAttribute('hidden', '');
+                                break;
+                        }
+                        /*for (var j=0; j<tdChildren.length; j++) {
+                            if (tdChildren[j].className == 'cutterParamValue') {
+                                switch (e.type) {
+                                    case 'focus':
+                                        children[i].removeAttribute('hidden');
+                                        break;
+                                    case 'blur':
+                                        children[i].setAttribute('hidden', '');
+                                        break;
+                                }
+                            }
+                        }*/
+                    }
+                }
+            }
+        }
+    }
+    var cutterParamInputs = document.getElementsByClassName('cutterParam');
+    if (cutterParamInputs.length > 0) {
+        for (var i=0; i<cutterParamInputs.length; i++) {
+            cutterParamInputs[i].addEventListener('focus',  showOrHide, false);
+            cutterParamInputs[i].addEventListener('blur', showOrHide, false);
+        }
     }
 </script>
 </html>
