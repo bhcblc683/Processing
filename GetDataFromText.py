@@ -175,8 +175,8 @@ class GetDataFromTxt(object):
 
 
 processing_function_insert_sql_template = """INSERT INTO processing_function.processing_function SET
-processing_function_name="%s",
-processing_function_description="%s",
+processing_function_name="%login",
+processing_function_description="%login",
 processing_precision_finishing="%d",
 processing_precision_semi="%d",
 processing_precision_rough="%d";
@@ -212,15 +212,15 @@ class SqlGenerator(object):
             "切削刃长度": "cutting_edge_length",
         }
         self._processing_function_insert_sql_template = """INSERT INTO processing_function.processing_function SET
-processing_function.processing_function_name="%s",
-processing_function.processing_function_description="%s",
+processing_function.processing_function_name="%login",
+processing_function.processing_function_description="%login",
 processing_function.processing_precision_finishing=%d,
 processing_function.processing_precision_semi=%d,
 processing_function.processing_precision_rough=%d;
 """
         self._processing_function_id_select_sql_template = """(SELECT processing_function_id FROM processing_function.processing_function
 WHERE
-processing_function_name="%s" AND
+processing_function_name="%login" AND
 processing_precision_finishing=%d AND
 processing_precision_semi=%d AND
 processing_precision_rough=%d)
@@ -268,8 +268,8 @@ processing_alloy_steel = %d,
                                                                    )
             machine_tool_insert_sql = self._machine_tool_insert_sql_template
             for k, v in instance_data['机床'].items():
-                machine_tool_insert_sql += ("""%s = "%s",""" + linesep) % (self._translation_dict[k], v.strip())
-            machine_tool_insert_sql += "processing_function_id = %s;" % processing_function_id_select_clause
+                machine_tool_insert_sql += ("""%login = "%login",""" + linesep) % (self._translation_dict[k], v.strip())
+            machine_tool_insert_sql += "processing_function_id = %login;" % processing_function_id_select_clause
             sys.stdout = f_mt
             print machine_tool_insert_sql
             cutter_insert_sql = self._cutter_insert_sql_template % (
@@ -288,8 +288,8 @@ processing_alloy_steel = %d,
                 # TODO: Why ???
                 if k == '':
                     continue
-                cutter_insert_sql += ("""%s = "%s",""" + linesep) % (self._translation_dict[k], v.strip())
-            cutter_insert_sql += "processing_function_id = %s;" % processing_function_id_select_clause
+                cutter_insert_sql += ("""%login = "%login",""" + linesep) % (self._translation_dict[k], v.strip())
+            cutter_insert_sql += "processing_function_id = %login;" % processing_function_id_select_clause
             sys.stdout = f_c;
             print cutter_insert_sql
         sys.stdout = tmp
@@ -310,4 +310,4 @@ if __name__ == '__main__':
     print_em_dict(data_dict)
     print '*' * 20
     s = SqlGenerator(data_dict)
-    s.generate_processing_function_insert_sql()
+    s.generate_insert_sql()

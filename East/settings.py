@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -90,11 +91,18 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'Static Files')]
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),
-                 os.path.join(BASE_DIR, 'login/templates'),   # path to login templates
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'login/templates'),  # path to login templates
                  )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'testing_cache_table'
+    }
+}
 
 # my settings
 PAGE_AFTER_LOGIN = 'test.html'

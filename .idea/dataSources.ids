@@ -14,4 +14,7 @@
       <primary-key name="PRIMARY" columns="article,dealer"/>
     </table>
   </data-source>
+  <data-source name="Django default" uuid="068fe73e-f9d7-4075-81f1-3d98531523e5">
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+  </data-source>
 </component>
