@@ -6,106 +6,165 @@
     <title></title>
 </head>
 <body>
-    <table>
-        <!--机床查询&结果显示行-->
-        <tr>
-            <td>
-                <h1>机床查询</h1>
-                <form action="query" method="post" id="machineToolQueryFrom" class="queryFrom" hidden="1">
+<table>
+    <!--机床查询&结果显示行-->
+    <tr>
+        <!--查询单元格-->
+        <td>
+            <h1>机床查询</h1>
+            <form action="query/machine_tool" method="post" id="machineToolQueryFrom" class="queryFrom" hidden="1">
                 {% csrf_token %}
-                    <table id="machineToolQueryTable" class="queryTable">
-                        {% for param, ref_val in machine_tool %}
-                            <tr class="searchRow">
-                                <td><em>{{ param }}</em></td>
-                                <td><input type="search" name={{ param }}/></td>
-                                <td>
-                                    <ul class="refUl" hidden="1">
-                                        {% for e_r in ref_val %}
-                                            <li><input type="checkbox" value={{ e_r }}/>{{ e_r }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                            <tr>
-                                <input type="submit" name="machine_tool_query_submit" value="机床查询"/>
-                            </tr>
-                    </table>
-                </form>
+                <table id="machineToolQueryTable" class="queryTable">
+                    {% for param, ref_val in machine_tool %}
+                        <tr class="searchRow">
+                            <td><em>{{ param }}</em></td>
+                            <td><input type="search" name='{{ param }}'/></td>
+                            <td>
+                                <ul class="refUl" hidden="1">
+                                    {% for e_r in ref_val %}
+                                        <li><input type="checkbox" value='{{ e_r }}'/>{{ e_r }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <input type="submit" name="machine_tool_query_submit" value="机床查询"/>
+                    </tr>
+                </table>
+            </form>
+        </td>
+        {% comment %}
+            <!--结果显示单元格-->
+            <td id="machineToolQueryResultTd">
+            {% for e_r in machine_tool_query_result %}
+                <p>
+                {% for e in e_r %}
+                    <em>{{ e }}</em>
+                {% endfor %}
+                </p>
+            {% endfor %}
             </td>
-        {% if machine_tool_query_result %}
-            <td>
-
-            </td>
-        {% endif %}
-        </tr>
-        <!--机床查询&结果显示行-->
-        <tr>
-            <td>
-                <h1>刀具查询</h1>
-                <form action="query" method="post" id="cutterQueryFrom" class="queryFrom" hidden="1">
+          {% endcomment %}
+    </tr>
+    <!--机床查询&结果显示行-->
+    <tr>
+        <td>
+            <h1>刀具查询</h1>
+            <form action="query/cutter" method="post" id="cutterQueryFrom" class="queryFrom" hidden="1">
                 {% csrf_token %}
-                    <table id="cutterQueryTable">
-                        {% for param, ref_val in cutter %}
-                            <tr class="searchRow">
-                                <td><em>{{ param }}</em></td>
-                                <td><input type="search" name={{ param }}/></td>
-                                <td>
-                                    <ul class="refUl" hidden="1">
-                                        {% for e_r in ref_val %}
-                                            <li><input type="checkbox" value={{ e_r }}/>{{ e_r }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                            <tr>
-                                <input type="submit" name="cutter_query_submit" value="刀具查询"/>
-                            </tr>
-                    </table>
-                </form>
-            </td>
-        {% if cutter_query_result %}
-            <td>
-
-            </td>
-        {% endif %}
-        </tr>
-    </table>
+                <table id="cutterQueryTable">
+                    {% for param, ref_val in cutter %}
+                        <tr class="searchRow">
+                            <td><em>{{ param }}</em></td>
+                            <td><input type="search" name='{{ param }}'/></td>
+                            <td>
+                                <ul class="refUl" hidden="1">
+                                    {% for e_r in ref_val %}
+                                        <li><input type="checkbox" value='{{ e_r }}'/>{{ e_r }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <input type="submit" name="cutter_query_submit" value="刀具查询"/>
+                    </tr>
+                </table>
+            </form>
+        </td>
+    </tr>
+</table>
 </body>
-    <script src={% static 'jquery-1.12.2.js' %}></script>
-    <script>
-        $(function() {
-            //
-            $('h1').on('click', function(e) {
-                $(e.target).siblings('form').removeAttr('hidden');
+<script src={% static 'jquery-1.12.2.js' %}></script>
+<script>
+    $(function () {
+        //
+        $('h1').on('click', function (e) {
+            $(e.target).siblings('form').removeAttr('hidden');
+        });
+        var $curRow = NaN;
+        // 使用事件委托 委托给获得焦点的input元素的父级元素
+        $('.searchRow').on('click', function (e) {
+            $curTar = $(e.currentTarget);
+            $tar = $(e.target);
+            // another search; hide, show
+            if (!$curTar.is($curRow)) {
+                if ($curRow) {
+                    $curRow.children(':has("ul")').children().attr('hidden', 1);
+                }
+                if ($tar.attr('type') == 'search') {
+                    $tar.parent().parent().find('ul').removeAttr('hidden');
+                }
+                $curRow = $curTar;
+            }
+        });
+        // 添加refUl的监听事件 事件委托 动态获得checkbox中的选择结果
+        $('.refUl').on('change', function (e) {
+            var $curTar = $(e.currentTarget);  // 发生change事件的refUl
+            var $selectedLi = $curTar.children().children(':checked');
+            var selectedLiText = '';
+            $selectedLi.each(function () {
+                if (selectedLiText != '') {
+                    selectedLiText += ',';
+                }
+                selectedLiText += $(this).attr('value');
             });
-            var $curRow = NaN;
-            // 使用事件委托 委托给获得焦点的input元素的父级元素
-            $('.searchRow').on('click', function (e) {
-                $curTar = $(e.currentTarget);
-                $tar = $(e.target);
-                // another search; hide, show
-                if (!$curTar.is($curRow)) {
-                    if ($curRow) {
-                        $curRow.children(':has("ul")').children().attr('hidden', 1);
-                    }
-                    if ($tar.attr('type') == 'search') {
-                        $tar.parent().parent().find('ul').removeAttr('hidden');
-                    }
-                    $curRow = $curTar;
+            $curTar.parent().parent().children().find('input[type="search"]').attr('value', selectedLiText);
+        })
+        // 对表单使用ajax
+        $('.queryFrom').on('submit', function (e) {
+            e.preventDefault();
+            $tar = $(e.target);
+            // 得到csrf token的值
+            var csrfTokenValue = $tar.children('input[name="csrfmiddlewaretoken"]').attr('value');
+            // 创建输入JSON
+            var searchData = {};
+            var $e  = $tar.find('input[type="search"][value]');
+            $tar.find('input[type="search"][value]').each(function () {
+                var $t = $(this);
+                var eachSearchName = $t.attr('name');
+                var eachSearchValue = $t.attr('value');
+                var eachSearchValueAfterSplit = eachSearchValue.split(',');
+                if (eachSearchValueAfterSplit.length > 1) {
+                    eachSearchValue = eachSearchValueAfterSplit;
+                }
+                if (eachSearchValue != '') {
+                    if (eachSearchValue == '是')
+                            eachSearchValue = 1;
+                    if (eachSearchValue == '否')
+                            eachSearchValue = 0;
+                    searchData[eachSearchName] = eachSearchValue;
                 }
             });
-            // 添加refUl的监听事件 事件委托 动态获得checkbox中的选择结果
-            $('.refUl').on('change', function (e) {
-                var $curTar = $(e.currentTarget);  // 发生change事件的refUl
-                var $selectedLi = $curTar.children().children(':checked');
-                var selectedLiText = '';
-                $selectedLi.each(function () {
-                    selectedLiText += $(this).attr('value');
-                });
-                $curTar.parent().parent().children().find('input[type="search"]').attr('value', selectedLiText);
-            })
+            var url = $tar.attr('action');
+            $.post(url, {
+                'csrfmiddlewaretoken': csrfTokenValue,
+                'query_dict': JSON.stringify(searchData)
+            }, function (data, testStatus, res) {
+                // 删除以前的结果 在父级元素的after插入查询结果
+                if (testStatus == 'success') {
+                    var responseArray = JSON.parse(JSON.parse(res.responseText)['responseArray']);
+                    var $resTd = $tar.parent().next();
+                    if ($resTd) {
+                        $resTd.remove();
+                    }
+                    $resTd = $('<td><p>查询结果</p></td>');
+                    if (responseArray.length == 0) {
+                        $resTd.append('<p>暂时无相关纪录</p>');
+                    } else {
+                        for (var i = 0; i < responseArray.length; ++i) {
+                            var $eachP = $('<p></p>');
+                            $eachP.text(responseArray[i]);
+                            $resTd.append($eachP);
+                        }
+                    }
+                    $tar.parent().after($resTd);
+                } else {
+                    $tar.parent().after("Sorry, there isn't any!!!");
+                }
+            });
         })
-    </script>
+    })
+</script>
 </html>
