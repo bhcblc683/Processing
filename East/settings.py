@@ -1,3 +1,5 @@
+# coding=utf8
+
 """
 Django settings for East project.
 
@@ -106,3 +108,41 @@ CACHES = {
 
 # my settings
 PAGE_AFTER_LOGIN = 'test.html'
+
+cutter_param = {
+    'cutter_name': u'刀具名称',
+    'cutter_model': u'刀具型号',
+    'cutter_length': u'刀具长度',
+    'cutter_blade_diameter': u'刃径',
+    'cutter_diameter': u'刀具直径',
+    'cutter_tip_diameter': u'刀尖圆弧半径',
+    'enter_angle': u'主偏角',
+    'blade_width': u'刃宽',
+    'screw_pitch': u'螺距',
+    'hilt_length': u'刀柄长度',
+    'cutter_material': u'刀具材料',
+    'max_groove_depth': u'最大切槽深度',
+    'screw_type': u'螺纹种类',
+    'blade_shape': u'刀片形状',
+    'blade_sum': u'刃数',
+    'cutting_edge_length': u'切削刃长度',
+    'processing_heat_resisting_alloy': u'可加工耐热合金',
+    'processing_cast_iron': u'可加工铸铁',
+    'processing_titanium_alloy': u'可加工钛合金',
+    'processing_carbon_steel': u'可加工碳钢',
+    'processing_mild_steel': u'可加工软钢',
+    'processing_steel': u'可加工钢',
+    'processing_nonferrous_metal': u'可加工有色金属',
+    'processing_stainless_steel': u'可加工不锈钢',
+    'processing_gray_cast_iron': u'可加工灰铸铁',
+    'processing_alloy_steel': u'可加工合金钢'
+}
+
+machine_tool_param = {
+    'machine_tool_name': u'机床名称',
+    'main_axle_rotation_speed': u'主轴转速',
+    'surface_roughness': u'表面粗糙度',
+    'processing_range': u'加工范围',
+    'main_electric_machinery_power': u'主电机功率',
+    'processing_precision': u'加工精度',
+}
