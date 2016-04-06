@@ -45,13 +45,13 @@ def gen_where_clause(con_list):
 
 
 def select_fields(param_dict):
-    fields = param_dict.keys()
-    res_s = fields[0]
-    res_l = [param_dict[fields[0]]]
-    for e in fields[1:]:
+    items = param_dict.items()
+    res_s = items[0][0]
+    res_l = [items[0][1]]
+    for e in items[1:]:
         res_s += ','
-        res_s += e
-        res_l.append(param_dict[e])
+        res_s += e[0]
+        res_l.append(e[1])
     return res_s, res_l
 
 
