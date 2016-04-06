@@ -11,13 +11,14 @@ from East.settings import machine_tool_param, cutter_param
 
 def inSet(l):
     res = r'('
-    last = len(l)-1
+    last = len(l) - 1
     for e in l:
         res += "'%(value)s'%(sep)s" % {
             'value': unicode(e),
             'sep': ',' if l.index(e) != last else ')',
         }
     return res
+
 
 def gen_where_clause(con_list):
     try:
@@ -43,11 +44,23 @@ def gen_where_clause(con_list):
     return where_clause
 
 
+def select_fields(param_dict):
+    fields = param_dict.keys()
+    res_s = fields[0]
+    res_l = [param_dict[fields[0]]]
+    for e in fields[1:]:
+        res_s += ','
+        res_s += e
+        res_l.append(param_dict[e])
+    return res_s, res_l
+
+
 def machine_tool_query(request):
     query_dict = loads(request.POST['query_dict'])
-    print query_dict
     db = dbOperator(db='processing_resource')
-    select_clause = r'SELECT * FROM machine_tool'
+    fields = select_fields(machine_tool_param)
+    select_clause = r'SELECT %(fields)s FROM machine_tool' % \
+                    {'fields': fields[0]}
     where_clause = gen_where_clause(
         [(k, query_dict[v])
          for k, v in machine_tool_param.items()
@@ -55,21 +68,26 @@ def machine_tool_query(request):
     )
     sql = select_clause + where_clause
     res = db.execute(sql)
-    return JsonResponse({'responseArray': dumps([e[:-1] for e in res])})
-
+    return JsonResponse({
+        'responseArray': dumps(res),
+        'responseFields': dumps(fields[1]),
+    })
 
 
 def cutter_query(request):
     query_dict = loads(request.POST['query_dict'])
     db = dbOperator(db='processing_resource')
-    select_clause = r'SELECT * FROM cutter'
+    fields = select_fields(cutter_param)
+    select_clause = r'SELECT %(fields)s FROM cutter' % \
+                    {'fields': select_fields(cutter_param)[0]}
     where_clause = gen_where_clause(
         [(k, query_dict[v])
          for k, v in cutter_param.items()
          if v in query_dict]
     )
     sql = select_clause + where_clause
-    print sql
     res = db.execute(sql)
-    print res
-    return JsonResponse({'responseArray': dumps([e[:-1] for e in res])})
+    return JsonResponse({
+        'responseArray': dumps(res),
+        'responseFields': dumps(fields[1]),
+    })

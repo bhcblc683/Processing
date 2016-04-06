@@ -120,7 +120,7 @@
             var csrfTokenValue = $tar.children('input[name="csrfmiddlewaretoken"]').attr('value');
             // 创建输入JSON
             var searchData = {};
-            var $e  = $tar.find('input[type="search"][value]');
+            var $e = $tar.find('input[type="search"][value]');
             $tar.find('input[type="search"][value]').each(function () {
                 var $t = $(this);
                 var eachSearchName = $t.attr('name');
@@ -131,9 +131,9 @@
                 }
                 if (eachSearchValue != '') {
                     if (eachSearchValue == '是')
-                            eachSearchValue = 1;
+                        eachSearchValue = 1;
                     if (eachSearchValue == '否')
-                            eachSearchValue = 0;
+                        eachSearchValue = 0;
                     searchData[eachSearchName] = eachSearchValue;
                 }
             });
@@ -144,7 +144,9 @@
             }, function (data, testStatus, res) {
                 // 删除以前的结果 在父级元素的after插入查询结果
                 if (testStatus == 'success') {
-                    var responseArray = JSON.parse(JSON.parse(res.responseText)['responseArray']);
+                    var resTextJSON = JSON.parse(res.responseText);
+                    var responseArray = JSON.parse(resTextJSON['responseArray']);
+                    var responseFields = JSON.parse(resTextJSON['responseFields']);
                     var $resTd = $tar.parent().next();
                     if ($resTd) {
                         $resTd.remove();
@@ -153,11 +155,32 @@
                     if (responseArray.length == 0) {
                         $resTd.append('<p>暂时无相关纪录</p>');
                     } else {
-                        for (var i = 0; i < responseArray.length; ++i) {
-                            var $eachP = $('<p></p>');
-                            $eachP.text(responseArray[i]);
-                            $resTd.append($eachP);
+                        var $resTdTable = $('<table></table>');
+                        if (responseFields) {
+                            var $thTr = $('<tr></tr>');
+                            for (var i=0; i<responseFields.length; ++i) {
+                                var $eachTh = $('<th></th>');
+                                $eachTh.text(responseFields[i]);
+                                $thTr.append($eachTh);
+                            }
                         }
+                        $resTdTable.append($thTr);
+                        for (var i = 0; i < responseArray.length; ++i) {
+                            var $eachTr = $('<tr></tr>');
+                            for (var j = 0; j < responseArray[i].length; ++j) {
+                                var $eachTd = $('<td></td>');
+                                if (responseArray[i][j] == null)
+                                    responseArray[i][j] = '无相关项';
+                                /*if (responseArray[i][j] == 1)
+                                    responseArray[i][j] = '是';
+                                if (responseArray[i][j] == 0)
+                                    responseArray[i][j] = '否';*/
+                                $eachTd.text(responseArray[i][j]);
+                                $eachTr.append($eachTd);
+                            }
+                            $resTdTable.append($eachTr);
+                        }
+                        $resTd.append($resTdTable);
                     }
                     $tar.parent().after($resTd);
                 } else {
